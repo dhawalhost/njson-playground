@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>njson playground</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="2"/><path d="M7 9h10M7 12h10M7 15h6" stroke="currentColor" stroke-width="2"/></svg>
+      <span>njson playground</span>
+    </div>
+    <div class="header-actions">
+      <button id="btn-pretty" class="btn ghost" title="Format JSON">Pretty</button>
+      <button id="btn-compact" class="btn ghost" title="Minify JSON">Compact</button>
+      <a href="https://github.com/dhawalhost/njson" target="_blank" rel="noreferrer" class="btn link">GitHub</a>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="pane left">
+      <h2>JSON</h2>
+      <textarea id="json-input" spellcheck="false"></textarea>
+      <div class="hint">Edit the JSON document, then run Get/Set/Delete operations on the right.</div>
+    </section>
+
+    <section class="pane right">
+      <div class="controls">
+        <div class="control-group">
+          <label for="path">Path</label>
+          <input id="path" placeholder="e.g. user.name or items.0.id or phones[?(@.type==\"work\")].number" />
+        </div>
+        <div class="control-group">
+          <label for="value">Value (for Set)</label>
+          <input id="value" placeholder='JSON value, e.g. "Jane" or 42 or {"x":1}' />
+        </div>
+        <div class="buttons">
+          <button id="btn-get" class="btn primary">Get</button>
+          <button id="btn-set" class="btn success">Set</button>
+          <button id="btn-delete" class="btn danger">Delete</button>
+        </div>
+      </div>
+
+      <div class="results">
+        <div class="result-card">
+          <div class="result-header">Result</div>
+          <pre id="result-output" class="code-block">—</pre>
+        </div>
+        <div class="result-card">
+          <div class="result-header">Type</div>
+          <div id="result-type" class="type-pill">—</div>
+        </div>
+        <div class="result-card">
+          <div class="result-header">Errors</div>
+          <pre id="result-error" class="code-block error">—</pre>
+        </div>
+      </div>
+
+      <div class="examples">
+        <div class="examples-header">
+          <h3>Examples & Syntax</h3>
+          <div class="docset-buttons">
+            <button class="btn ghost" data-doc="default">Sample: user/items</button>
+            <button class="btn ghost" data-doc="store">Sample: store/books</button>
+            <button class="btn ghost" data-doc="employees">Sample: employees</button>
+          </div>
+        </div>
+        <div id="example-list" class="example-list"></div>
+
+        <details class="syntax-help">
+          <summary>Quick syntax reference</summary>
+          <ul class="syntax-list">
+            <li><code>key.subkey</code> — nested object access</li>
+            <li><code>array.0</code> or <code>array[0]</code> — array index</li>
+            <li><code>array.#</code> — all array elements; <code>users.#.name</code> maps field</li>
+            
+            <li><code>[?(@.field op value)]</code> — filters with <code>== != &gt; &gt;= &lt; &lt;= =~</code></li>
+            <li><code>@modifier</code> — <code>@reverse</code>, <code>@sort</code>, <code>@group</code></li>
+            <li>SET append with <code>array.-1</code></li>
+          </ul>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <span>Built with njson • <a href="#" onclick="location.reload()">Reload</a></span>
+  </footer>
+
+  <!-- Go WASM runtime (copied during CI to this folder) -->
+  <script src="./wasm_exec.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>
