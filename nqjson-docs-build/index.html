@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="nqjson - Next-generation JSON queries for Go with zero-allocation performance, 8+ modifiers, multipath queries, and advanced filtering.">
+  <meta name="keywords" content="nqjson, JSON, Go, golang, JSON parser, JSON query, zero allocation, high performance">
+  <meta name="author" content="dhawalhost">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content="nqjson - Next-Generation JSON Queries for Go">
+  <meta property="og:description" content="Zero-allocation JSON manipulation with blazing-fast performance">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://docs.dhawalhost.com">
+  
+  <title>nqjson Documentation - Next-Generation JSON Queries for Go</title>
+  
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <img src="./assets/logo.svg" alt="nqjson logo" class="nav-logo" width="40" height="40">
+        <span class="nav-title">nqjson</span>
+        <span class="nav-subtitle">docs</span>
+      </div>
+      
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <div class="nav-menu" id="navMenu">
+        <a href="./getting-started.html" class="nav-link">Getting Started</a>
+        <a href="./syntax.html" class="nav-link">Syntax</a>
+        <a href="./api.html" class="nav-link">API</a>
+        <a href="./examples.html" class="nav-link">Examples</a>
+        <a href="./performance.html" class="nav-link">Performance</a>
+        <a href="https://github.com/dhawalhost/nqjson" target="_blank" rel="noopener" class="nav-link nav-link-github">
+          <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          Next-Generation<br>
+          <span class="gradient-text">JSON Queries</span> for Go
+        </h1>
+        <p class="hero-description">
+          Blazing-fast JSON manipulation with zero allocations, 8+ advanced modifiers, 
+          multipath queries, and powerful filtering. Built for modern Go applications.
+        </p>
+        <div class="hero-actions">
+          <a href="./getting-started.html" class="btn btn-primary btn-large">
+            Get Started
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"/>
+            </svg>
+          </a>
+          <a href="./examples.html" class="btn btn-secondary btn-large">
+            Try Examples
+          </a>
+          <a href="https://nqjson.dhawalhost.com" class="btn btn-ghost btn-large" target="_blank" rel="noopener">
+            Playground
+          </a>
+        </div>
+        
+        <!-- Quick Install -->
+        <div class="hero-install">
+          <code class="install-command">go get github.com/dhawalhost/nqjson</code>
+          <button class="btn-copy" data-copy="go get github.com/dhawalhost/nqjson" aria-label="Copy install command">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M4 2a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H4zm0 1h8a1 1 0 011 1v8a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1z"/>
+              <path d="M2 0a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-1h1a2 2 0 002-2V2a2 2 0 00-2-2H5a2 2 0 00-2 2v1H2z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <div class="hero-code">
+        <div class="code-window">
+          <div class="code-header">
+            <span class="code-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </span>
+            <span class="code-title">example.go</span>
+          </div>
+          <pre class="code-content"><code class="language-go">package main
+
+import (
+    "fmt"
+    "github.com/dhawalhost/nqjson"
+)
+
+func main() {
+    json := []byte(`{
+        "user": {
+            "name": "Alice",
+            "email": "alice@example.com",
+            "age": 30
+        },
+        "scores": [95, 87, 92, 88, 91]
+    }`)
+    
+    // Get multiple fields in one call
+    data := nqjson.Get(json, "user.name,user.email,user.age")
+    fmt.Println(data.String())
+    // ["Alice","alice@example.com",30]
+    
+    // Statistical operations
+    avg := nqjson.Get(json, "scores|@avg")
+    fmt.Printf("Average: %.1f\n", avg.Float())
+    // Average: 90.6
+    
+    // Unique sorted values
+    unique := nqjson.Get(json, "scores|@distinct|@sort")
+    fmt.Println(unique.String())
+    // [87,88,91,92,95]
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h2 class="section-title">Why nqjson?</h2>
+      <p class="section-subtitle">Built for performance, designed for developers</p>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Zero Allocations</h3>
+          <p class="feature-description">
+            GET operations produce <strong>0 allocations</strong> on simple paths. No GC pressure, 
+            predictable latency, and minimal memory overhead.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M2 12h20"/>
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">8+ Advanced Modifiers</h3>
+          <p class="feature-description">
+            Built-in modifiers for <strong>@sum</strong>, <strong>@avg</strong>, <strong>@distinct</strong>, 
+            <strong>@sort</strong>, <strong>@min</strong>, <strong>@max</strong>, and more.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Multipath Queries</h3>
+          <p class="feature-description">
+            Get multiple fields in a single operation: 
+            <code>user.name,user.email,user.age</code>
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 3h18v18H3z"/>
+              <path d="M9 9h6v6H9z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Powerful Filtering</h3>
+          <p class="feature-description">
+            Advanced filter expressions with comparison operators, regex matching, 
+            and conditional queries.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Production Ready</h3>
+          <p class="feature-description">
+            <strong>73.9% test coverage</strong> with 168 comprehensive tests. 
+            Battle-tested and zero runtime dependencies.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Path Caching</h3>
+          <p class="feature-description">
+            Use <code>GetCached()</code> for 2-5x speedup on frequently accessed paths. 
+            Perfect for hot code paths.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Example Section -->
+  <section class="quick-examples">
+    <div class="container">
+      <h2 class="section-title">Quick Examples</h2>
+      
+      <div class="examples-tabs">
+        <button class="tab-btn active" data-tab="basic">Basic Operations</button>
+        <button class="tab-btn" data-tab="modifiers">Modifiers</button>
+        <button class="tab-btn" data-tab="filters">Filters</button>
+        <button class="tab-btn" data-tab="multipath">Multipath</button>
+      </div>
+      
+      <div class="tab-content active" id="tab-basic">
+        <pre><code class="language-go">// Dot notation for nested access
+name := nqjson.Get(json, "user.profile.name")
+
+// Array indexing
+first := nqjson.Get(json, "items.0")
+last := nqjson.Get(json, "items.-1")
+
+// All array elements
+all := nqjson.Get(json, "items.#")
+
+// Field from all elements
+names := nqjson.Get(json, "users.#.name")</code></pre>
+      </div>
+      
+      <div class="tab-content" id="tab-modifiers">
+        <pre><code class="language-go">// Statistical aggregations
+total := nqjson.Get(json, "sales|@sum")
+avg := nqjson.Get(json, "scores|@avg")
+min := nqjson.Get(json, "prices|@min")
+max := nqjson.Get(json, "values|@max")
+
+// Array transformations
+unique := nqjson.Get(json, "tags|@distinct")
+sorted := nqjson.Get(json, "items|@sort")
+reversed := nqjson.Get(json, "list|@reverse")
+first := nqjson.Get(json, "array|@first")
+last := nqjson.Get(json, "array|@last")</code></pre>
+      </div>
+      
+      <div class="tab-content" id="tab-filters">
+        <pre><code class="language-go">// Filter by condition
+active := nqjson.Get(json, `users[?(@.active==true)]`)
+adults := nqjson.Get(json, `users[?(@.age>=18)].name`)
+expensive := nqjson.Get(json, `products[?(@.price>100)].name`)
+
+// Regex matching
+company := nqjson.Get(json, `emails[?(@.email=~".*@company.com")]`)
+
+// Combined filters and projections
+emails := nqjson.Get(json, `users[?(@.role=="admin")].email`)</code></pre>
+      </div>
+      
+      <div class="tab-content" id="tab-multipath">
+        <pre><code class="language-go">// Get multiple fields in one call
+data := nqjson.Get(json, "user.name,user.email,user.age")
+// Returns: ["John","john@example.com",30]
+
+// Multipath with modifiers
+results := nqjson.Get(json, "nums|@reverse,scores|@avg")
+
+// Complex queries
+info := nqjson.Get(json, `user.name,user.email,orders.#.total|@sum`)</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Performance Stats -->
+  <section class="performance-stats">
+    <div class="container">
+      <h2 class="section-title">Performance That Matters</h2>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Allocations</div>
+          <div class="stat-description">on simple GET operations</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-number">2-5<span class="stat-unit">x</span></div>
+          <div class="stat-label">Faster</div>
+          <div class="stat-description">with path caching</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-number">73.9<span class="stat-unit">%</span></div>
+          <div class="stat-label">Coverage</div>
+          <div class="stat-description">with 168 tests</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-number">8<span class="stat-unit">+</span></div>
+          <div class="stat-label">Modifiers</div>
+          <div class="stat-description">exclusive to nqjson</div>
+        </div>
+      </div>
+      
+      <div class="cta-center">
+        <a href="./performance.html" class="btn btn-outline btn-large">
+          View Benchmarks
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4 class="footer-title">nqjson</h4>
+          <p class="footer-description">
+            Next-generation JSON queries for Go with zero-allocation performance.
+          </p>
+        </div>
+        
+        <div class="footer-section">
+          <h4 class="footer-title">Documentation</h4>
+          <ul class="footer-links">
+            <li><a href="./getting-started.html">Getting Started</a></li>
+            <li><a href="./syntax.html">Syntax Guide</a></li>
+            <li><a href="./api.html">API Reference</a></li>
+            <li><a href="./examples.html">Examples</a></li>
+            <li><a href="./performance.html">Performance</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4 class="footer-title">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/dhawalhost/nqjson" target="_blank" rel="noopener">GitHub Repository</a></li>
+            <li><a href="https://pkg.go.dev/github.com/dhawalhost/nqjson" target="_blank" rel="noopener">Go Package</a></li>
+            <li><a href="https://nqjson.dhawalhost.com" target="_blank" rel="noopener">Playground</a></li>
+            <li><a href="https://github.com/dhawalhost/nqjson/issues" target="_blank" rel="noopener">Report Issue</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4 class="footer-title">Community</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/dhawalhost/nqjson/discussions" target="_blank" rel="noopener">Discussions</a></li>
+            <li><a href="https://github.com/dhawalhost/nqjson/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a></li>
+            <li><a href="https://github.com/dhawalhost/nqjson/blob/main/LICENSE" target="_blank" rel="noopener">License (MIT)</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>
+          Built with ❤️ by <a href="https://github.com/dhawalhost" target="_blank" rel="noopener">dhawalhost</a>
+        </p>
+        <p class="footer-version">nqjson v1.0.0 • Documentation v1.0.0</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>
