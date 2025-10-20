@@ -5,6 +5,7 @@ const valueInput = $('#value');
 const out = {
   result: $('#result-output'),
   type: $('#result-type'),
+  info: $('#result-info'),
   error: $('#result-error')
 };
 
@@ -78,10 +79,25 @@ function getJSONBytes() {
   return new TextEncoder().encode(s);
 }
 
-function setResult({ text = '—', type = '—', error = '' } = {}) {
+function setResult({ text = 'Ready to query...', type = '—', info = '—', error = '' } = {}) {
   out.result.textContent = text;
   out.type.textContent = type;
-  out.error.textContent = error || '—';
+  if (out.info) out.info.textContent = info;
+  out.error.textContent = error || 'No errors';
+}
+
+function updateStats() {
+  const statsEl = $('#json-stats');
+  if (statsEl) {
+    try {
+      const parsed = JSON.parse(jsonInput.value);
+      const lines = jsonInput.value.split('\n').length;
+      const chars = jsonInput.value.length;
+      statsEl.textContent = `${lines} lines, ${chars} chars`;
+    } catch {
+      statsEl.textContent = 'Invalid JSON';
+    }
+  }
 }
 
 // WASM bridge helpers
@@ -116,22 +132,26 @@ async function onGet() {
   try {
     await loadWasm();
     const jsonStr = jsonInput.value;
-    const data = window.njsonGet(jsonStr, pathInput.value);
+    const data = window.nqjsonGet(jsonStr, pathInput.value);
     if (!data.exists) {
-      setResult({ text: 'null (not found)', type: 'null' });
+      setResult({ text: 'null (not found)', type: 'null', info: 'Path does not exist in document' });
       return;
     }
     if (data.value !== undefined) {
-      setResult({ text: JSON.stringify(data.value, null, 2), type: data.type });
+      const typeInfo = data.type === 'array' ? `array (${Array.isArray(data.value) ? data.value.length : 0} items)` :
+                      data.type === 'object' ? `object (${data.value && typeof data.value === 'object' ? Object.keys(data.value).length : 0} keys)` :
+                      data.type;
+      setResult({ text: JSON.stringify(data.value, null, 2), type: data.type, info: typeInfo });
     } else if (typeof data.string === 'string') {
-      setResult({ text: JSON.stringify(data.string), type: data.type });
+      setResult({ text: JSON.stringify(data.string), type: data.type, info: `string (${data.string.length} chars)` });
     } else if (typeof data.number === 'number') {
-      setResult({ text: String(data.number), type: data.type });
+      setResult({ text: String(data.number), type: data.type, info: 'number' });
     } else if (typeof data.bool === 'boolean') {
-      setResult({ text: String(data.bool), type: data.type });
+      setResult({ text: String(data.bool), type: data.type, info: 'boolean' });
     } else {
-      setResult({ text: 'null', type: 'null' });
+      setResult({ text: 'null', type: 'null', info: 'null value' });
     }
+    updateStats();
   } catch (e) {
     setResult({ error: e.message });
   }
@@ -144,10 +164,11 @@ async function onSet() {
     if (!valueText) throw new Error('Provide a JSON value to set');
     let parsed;
     try { parsed = JSON.parse(valueText); } catch { throw new Error('Value must be valid JSON'); }
-    const resp = window.njsonSet(jsonInput.value, pathInput.value, JSON.stringify(parsed));
+    const resp = window.nqjsonSet(jsonInput.value, pathInput.value, JSON.stringify(parsed));
     if (resp.error) throw new Error(resp.error);
     jsonInput.value = JSON.stringify(JSON.parse(resp.json), null, 2);
-    setResult({ text: 'Updated JSON applied', type: '—' });
+    updateStats();
+    setResult({ text: 'Value set successfully', type: 'success', info: 'JSON document updated' });
   } catch (e) {
     setResult({ error: e.message });
   }
@@ -156,10 +177,11 @@ async function onSet() {
 async function onDelete() {
   try {
     await loadWasm();
-    const resp = window.njsonDelete(jsonInput.value, pathInput.value);
+    const resp = window.nqjsonDelete(jsonInput.value, pathInput.value);
     if (resp.error) throw new Error(resp.error);
     jsonInput.value = JSON.stringify(JSON.parse(resp.json), null, 2);
-    setResult({ text: 'Deletion applied', type: '—' });
+    updateStats();
+    setResult({ text: 'Value deleted successfully', type: 'success', info: 'JSON document updated' });
   } catch (e) {
     setResult({ error: e.message });
   }
@@ -167,11 +189,35 @@ async function onDelete() {
 
 // Pretty/Compact
 $('#btn-pretty').addEventListener('click', () => {
-  try { setJSON(JSON.parse(jsonInput.value)); } catch { setResult({ error: 'Invalid JSON' }); }
+  try { 
+    setJSON(JSON.parse(jsonInput.value)); 
+    setResult({ text: 'JSON formatted', type: 'success', info: 'Applied pretty formatting' });
+  } catch { 
+    setResult({ error: 'Invalid JSON' }); 
+  }
 });
 $('#btn-compact').addEventListener('click', () => {
-  try { jsonInput.value = JSON.stringify(JSON.parse(jsonInput.value)); } catch { setResult({ error: 'Invalid JSON' }); }
+  try { 
+    jsonInput.value = JSON.stringify(JSON.parse(jsonInput.value)); 
+    updateStats();
+    setResult({ text: 'JSON compacted', type: 'success', info: 'Removed formatting' });
+  } catch { 
+    setResult({ error: 'Invalid JSON' }); 
+  }
 });
+
+// Clear JSON button
+const clearBtn = $('#clear-json');
+if (clearBtn) {
+  clearBtn.addEventListener('click', () => {
+    jsonInput.value = '{}';
+    updateStats();
+    setResult({ text: 'JSON cleared', type: 'success', info: 'Document reset to empty object' });
+  });
+}
+
+// JSON input change tracking
+jsonInput.addEventListener('input', updateStats);
 
 $('#btn-get').addEventListener('click', onGet);
 $('#btn-set').addEventListener('click', onSet);
@@ -181,10 +227,11 @@ $('#btn-delete').addEventListener('click', onDelete);
 setJSON(sample);
 pathInput.value = 'user.profile.address.city';
 setResult();
+updateStats();
 
 // Examples UI
 const exampleList = document.getElementById('example-list');
-const docsetButtons = document.querySelectorAll('[data-doc]');
+const docsetButtons = document.querySelectorAll('.dataset-btn');
 
 function renderExamples(key) {
   const set = docs[key] || docs.default;
@@ -194,13 +241,14 @@ function renderExamples(key) {
     const el = document.createElement('div');
     el.className = 'example-item';
     el.innerHTML = `
-      <div>
-        <div><strong>${ex.title}</strong> — <span style="color:#8a94c4">${ex.note || ''}</span></div>
-        <code>${ex.path}</code>
+      <div class="example-content">
+        <div class="example-title">${ex.title}</div>
+        <div class="example-path">${ex.path}</div>
+        <div class="example-note">${ex.note || ''}</div>
       </div>
       <div class="actions">
-        <button class="btn ghost" data-path="${ex.path}">Try</button>
-        <button class="btn ghost" data-copy="${ex.path}">Copy</button>
+        <button class="btn btn-ghost" data-path="${ex.path}">Try</button>
+        <button class="btn btn-ghost" data-copy="${ex.path}">Copy</button>
       </div>
     `;
     exampleList.appendChild(el);
@@ -215,10 +263,16 @@ function renderExamples(key) {
   exampleList.querySelectorAll('[data-copy]').forEach(btn => {
     btn.addEventListener('click', async () => {
       await navigator.clipboard.writeText(btn.getAttribute('data-copy'));
-      setResult({ text: 'Path copied to clipboard', type: '—' });
+      setResult({ text: 'Path copied to clipboard', type: 'success', info: 'Query path copied' });
     });
   });
 }
 
-docsetButtons.forEach(b => b.addEventListener('click', () => renderExamples(b.dataset.doc)));
+docsetButtons.forEach(b => b.addEventListener('click', () => {
+  // Update active state
+  docsetButtons.forEach(btn => btn.classList.remove('active'));
+  b.classList.add('active');
+  renderExamples(b.dataset.doc);
+}));
+renderExamples('default');
 renderExamples('default');

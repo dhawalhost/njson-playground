@@ -3,91 +3,275 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>njson playground</title>
+  <title>nqjson playground • Next-Gen JSON Queries</title>
   <link rel="stylesheet" href="./styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="app-header">
-    <div class="brand">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="2"/><path d="M7 9h10M7 12h10M7 15h6" stroke="currentColor" stroke-width="2"/></svg>
-      <span>njson playground</span>
+  <div class="app">
+    <!-- Animated background -->
+    <div class="bg-animation">
+      <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+        <div class="shape shape-5"></div>
+      </div>
     </div>
-    <div class="header-actions">
-      <button id="btn-pretty" class="btn ghost" title="Format JSON">Pretty</button>
-      <button id="btn-compact" class="btn ghost" title="Minify JSON">Compact</button>
-      <a href="https://github.com/dhawalhost/njson" target="_blank" rel="noreferrer" class="btn link">GitHub</a>
-    </div>
-  </header>
 
-  <main class="layout">
-    <section class="pane left">
-      <h2>JSON</h2>
-      <textarea id="json-input" spellcheck="false"></textarea>
-      <div class="hint">Edit the JSON document, then run Get/Set/Delete operations on the right.</div>
-    </section>
-
-    <section class="pane right">
-      <div class="controls">
-        <div class="control-group">
-          <label for="path">Path</label>
-          <input id="path" placeholder="e.g. user.name or items.0.id or phones[?(@.type==\"work\")].number" />
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="8" fill="url(#logoGradient)"/>
+            <path d="M8 12h16v2H8z" fill="white" opacity="0.9"/>
+            <path d="M8 16h12v2H8z" fill="white" opacity="0.7"/>
+            <path d="M8 20h8v2H8z" fill="white" opacity="0.5"/>
+            <defs>
+              <linearGradient id="logoGradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#6366f1"/>
+                <stop offset="1" stop-color="#8b5cf6"/>
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
-        <div class="control-group">
-          <label for="value">Value (for Set)</label>
-          <input id="value" placeholder='JSON value, e.g. "Jane" or 42 or {"x":1}' />
-        </div>
-        <div class="buttons">
-          <button id="btn-get" class="btn primary">Get</button>
-          <button id="btn-set" class="btn success">Set</button>
-          <button id="btn-delete" class="btn danger">Delete</button>
+        <div class="brand-text">
+          <span class="brand-name">nqjson</span>
+          <span class="brand-tagline">playground</span>
         </div>
       </div>
+      
+      <nav class="header-nav">
+        <button id="btn-pretty" class="btn btn-ghost" title="Format JSON">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M4 3h8v1H4zM2 5h12v1H2zM4 7h8v1H4zM6 9h4v1H6z"/>
+          </svg>
+          Pretty
+        </button>
+        <button id="btn-compact" class="btn btn-ghost" title="Minify JSON">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M2 4h12v1H2zM2 7h12v1H2zM2 10h12v1H2z"/>
+          </svg>
+          Compact
+        </button>
+        <a href="https://github.com/dhawalhost/nqjson" target="_blank" rel="noreferrer" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          GitHub
+        </a>
+      </nav>
+    </header>
 
-      <div class="results">
-        <div class="result-card">
-          <div class="result-header">Result</div>
-          <pre id="result-output" class="code-block">—</pre>
-        </div>
-        <div class="result-card">
-          <div class="result-header">Type</div>
-          <div id="result-type" class="type-pill">—</div>
-        </div>
-        <div class="result-card">
-          <div class="result-header">Errors</div>
-          <pre id="result-error" class="code-block error">—</pre>
-        </div>
-      </div>
-
-      <div class="examples">
-        <div class="examples-header">
-          <h3>Examples & Syntax</h3>
-          <div class="docset-buttons">
-            <button class="btn ghost" data-doc="default">Sample: user/items</button>
-            <button class="btn ghost" data-doc="store">Sample: store/books</button>
-            <button class="btn ghost" data-doc="employees">Sample: employees</button>
+    <main class="layout">
+      <section class="pane pane-left">
+        <div class="pane-header">
+          <h2>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+            </svg>
+            JSON Document
+          </h2>
+          <div class="pane-tools">
+            <button class="tool-btn" id="clear-json" title="Clear JSON">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"/>
+                <path d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+              </svg>
+            </button>
           </div>
         </div>
-        <div id="example-list" class="example-list"></div>
+        <div class="editor-container">
+          <textarea id="json-input" spellcheck="false" placeholder='{ "message": "Start typing your JSON here..." }'></textarea>
+          <div class="editor-stats">
+            <span id="json-stats">Ready</span>
+          </div>
+        </div>
+        <div class="hint">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 15A7 7 0 118 1a7 7 0 010 14zm0 1A8 8 0 108 0a8 8 0 000 16z"/>
+            <path d="M5.255 5.786a.237.237 0 00.241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 00.25.246h.811a.25.25 0 00.25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+          </svg>
+          Edit your JSON document, then run <strong>Get</strong>, <strong>Set</strong>, or <strong>Delete</strong> operations using the controls on the right.
+        </div>
+      </section>
 
-        <details class="syntax-help">
-          <summary>Quick syntax reference</summary>
-          <ul class="syntax-list">
-            <li><code>key.subkey</code> — nested object access</li>
-            <li><code>array.0</code> or <code>array[0]</code> — array index</li>
-            <li><code>array.#</code> — all array elements; <code>users.#.name</code> maps field</li>
+      <section class="pane pane-right">
+        <div class="controls-section">
+          <div class="pane-header">
+            <h2>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Query Operations
+            </h2>
+          </div>
+          
+          <div class="controls">
+            <div class="control-row">
+              <div class="control-group">
+                <label for="path">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M1.5 1.5A.5.5 0 012 1h12a.5.5 0 01.5.5v2a.5.5 0 01-.128.334L10 8.692V13.5a.5.5 0 01-.342.474l-3 1A.5.5 0 016 14.5V8.692L1.628 3.834A.5.5 0 011.5 3.5v-2z"/>
+                  </svg>
+                  Query Path
+                </label>
+                <input id="path" placeholder='user.profile.name or items[0].id or users[?(@.active==true)].name' autocomplete="off" />
+              </div>
+            </div>
             
-            <li><code>[?(@.field op value)]</code> — filters with <code>== != &gt; &gt;= &lt; &lt;= =~</code></li>
-            <li><code>@modifier</code> — <code>@reverse</code>, <code>@sort</code>, <code>@group</code></li>
-            <li>SET append with <code>array.-1</code></li>
-          </ul>
-        </details>
-      </div>
-    </section>
-  </main>
+            <div class="control-row">
+              <div class="control-group">
+                <label for="value">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 000 2.5v11a.5.5 0 00.707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 00.78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0016 13.5v-11a.5.5 0 00-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                  </svg>
+                  Value <span class="optional">(for Set operations)</span>
+                </label>
+                <input id="value" placeholder='"Hello World", 42, true, {"key": "value"}, or [1,2,3]' autocomplete="off" />
+              </div>
+            </div>
+            
+            <div class="actions">
+              <button id="btn-get" class="btn btn-primary action-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M11.742 10.344a6.5 6.5 0 10-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 001.415-1.414l-3.85-3.85a1.007 1.007 0 00-.115-.1zM12 6.5a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z"/>
+                </svg>
+                Get Value
+              </button>
+              <button id="btn-set" class="btn btn-success action-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M12.146.146a.5.5 0 01.708 0l3 3a.5.5 0 010 .708l-10 10a.5.5 0 01-.168.11l-5 2a.5.5 0 01-.65-.65l2-5a.5.5 0 01.11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 01.5.5v.5h.5a.5.5 0 01.5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 015 12.5V12h-.5a.5.5 0 01-.5-.5V11h-.5a.5.5 0 01-.468-.325z"/>
+                </svg>
+                Set Value
+              </button>
+              <button id="btn-delete" class="btn btn-danger action-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"/>
+                  <path d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1z"/>
+                </svg>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
 
-  <footer class="app-footer">
-    <span>Built with njson • <a href="#" onclick="location.reload()">Reload</a></span>
-  </footer>
+        <div class="results-section">
+          <div class="result-grid">
+            <div class="result-card result-primary">
+              <div class="result-header">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M8 4.754a3.246 3.246 0 100 6.492 3.246 3.246 0 000-6.492zM5.754 8a2.246 2.246 0 114.492 0 2.246 2.246 0 01-4.492 0z"/>
+                  <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 01-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 01-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 01.52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 011.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 011.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 01.52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 01-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 01-1.255-.52l-.094-.319z"/>
+                </svg>
+                Result
+              </div>
+              <pre id="result-output" class="result-content">Ready to query...</pre>
+            </div>
+            
+            <div class="result-card">
+              <div class="result-header">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 01-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 01.872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 012.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 012.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 01.872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 01-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 01-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 100-5.86 2.929 2.929 0 000 5.858z"/>
+                </svg>
+                Type & Info
+              </div>
+              <div class="result-content">
+                <div id="result-type" class="type-badge">—</div>
+                <div id="result-info" class="result-info">—</div>
+              </div>
+            </div>
+            
+            <div class="result-card result-error">
+              <div class="result-header">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M8.982 1.566a1.13 1.13 0 00-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 01-1.1 0L7.1 5.995A.905.905 0 018 5zm.002 6a1 1 0 100 2 1 1 0 000-2z"/>
+                </svg>
+                Errors & Warnings
+              </div>
+              <pre id="result-error" class="result-content">No errors</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="examples-section">
+          <div class="examples-header">
+            <h3>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+                <path d="M9 1.5a7.5 7.5 0 100 15 7.5 7.5 0 000-15zM8.25 8.25V4.5a.75.75 0 011.5 0v3.75a.75.75 0 01-.75.75H6.75a.75.75 0 010-1.5h1.5z"/>
+              </svg>
+              Examples & Datasets
+            </h3>
+            <div class="dataset-switcher">
+              <button class="dataset-btn active" data-doc="default">Users & Items</button>
+              <button class="dataset-btn" data-doc="store">Bookstore</button>
+              <button class="dataset-btn" data-doc="employees">Company</button>
+            </div>
+          </div>
+          
+          <div id="example-list" class="example-list"></div>
+
+          <details class="syntax-help">
+            <summary>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 15A7 7 0 118 1a7 7 0 010 14zm0 1A8 8 0 108 0a8 8 0 000 16z"/>
+                <path d="M5.255 5.786a.237.237 0 00.241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 00.25.246h.811a.25.25 0 00.25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+              </svg>
+              nqjson Query Syntax Reference
+            </summary>
+            <div class="syntax-content">
+              <div class="syntax-category">
+                <h4>Basic Navigation</h4>
+                <ul class="syntax-list">
+                  <li><code>key.subkey</code> — Navigate nested objects</li>
+                  <li><code>array[0]</code> or <code>array.0</code> — Access array elements</li>
+                  <li><code>array.#</code> — Get all array elements</li>
+                  <li><code>array.#.field</code> — Map field from all elements</li>
+                </ul>
+              </div>
+              
+              <div class="syntax-category">
+                <h4>Advanced Queries</h4>
+                <ul class="syntax-list">
+                  <li><code>[?(@.field == value)]</code> — Filter with conditions</li>
+                  <li><code>[?(@.price > 25)]</code> — Numeric comparisons</li>
+                  <li><code>[?(@.name =~ "pattern")]</code> — Regex matching</li>
+                  <li><code>@reverse</code>, <code>@sort</code> — Result modifiers</li>
+                </ul>
+              </div>
+              
+              <div class="syntax-category">
+                <h4>Operators</h4>
+                <ul class="syntax-list">
+                  <li><code>==, !=, <, <=, >, >=</code> — Comparison operators</li>
+                  <li><code>=~</code> — Regular expression matching</li>
+                  <li><code>array.-1</code> — Append to arrays (Set operation)</li>
+                </ul>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <div class="footer-content">
+        <span class="footer-text">Built with ❤️ using <strong>nqjson</strong> • Next-Generation JSON Queries</span>
+        <div class="footer-links">
+          <a href="#" onclick="location.reload()" class="footer-link">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+              <path d="M1.5 2.25A.75.75 0 012.25 1.5h2.5a.75.75 0 010 1.5h-2.5v2.5a.75.75 0 01-1.5 0v-2.5zM11.25 1.5a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0v-2.5h-2.5a.75.75 0 010-1.5h2.5zM12 9.25a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 010-1.5h2.5v-2.5a.75.75 0 01.75-.75zM2.25 9.25a.75.75 0 01.75.75v2.5h2.5a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75v-2.5a.75.75 0 01.75-.75z"/>
+            </svg>
+            Reload
+          </a>
+          <a href="https://github.com/dhawalhost/nqjson/blob/main/API.md" target="_blank" class="footer-link">API Docs</a>
+        </div>
+      </div>
+    </footer>
+  </div>
 
   <!-- Go WASM runtime (copied during CI to this folder) -->
   <script src="./wasm_exec.js"></script>

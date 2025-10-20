@@ -6,7 +6,7 @@ import (
     "encoding/json"
     "syscall/js"
 
-    "github.com/dhawalhost/njson"
+    "github.com/dhawalhost/nqjson"
 )
 
 func getWrapper(this js.Value, args []js.Value) interface{} {
@@ -15,27 +15,27 @@ func getWrapper(this js.Value, args []js.Value) interface{} {
     }
     jsonStr := args[0].String()
     path := args[1].String()
-    res := njson.Get(json.RawMessage(jsonStr), path)
+    res := nqjson.Get(json.RawMessage(jsonStr), path)
     if !res.Exists() {
         return map[string]interface{}{"exists": false, "type": "null"}
     }
     out := map[string]interface{}{"exists": true}
     switch res.Type {
-    case njson.TypeString:
+    case nqjson.TypeString:
         out["type"] = "string"
         out["string"] = res.String()
-    case njson.TypeNumber:
+    case nqjson.TypeNumber:
         out["type"] = "number"
         out["number"] = res.Float()
-    case njson.TypeBoolean:
+    case nqjson.TypeBoolean:
         out["type"] = "boolean"
         out["bool"] = res.Bool()
-    case njson.TypeArray:
+    case nqjson.TypeArray:
         out["type"] = "array"
         var v any
         _ = json.Unmarshal(res.Raw, &v)
         out["value"] = v
-    case njson.TypeObject:
+    case nqjson.TypeObject:
         out["type"] = "object"
         var v any
         _ = json.Unmarshal(res.Raw, &v)
@@ -53,7 +53,7 @@ func setWrapper(this js.Value, args []js.Value) interface{} {
     jsonStr := args[0].String()
     path := args[1].String()
     valStr := args[2].String()
-    b, err := njson.Set(json.RawMessage(jsonStr), path, json.RawMessage(valStr))
+    b, err := nqjson.Set(json.RawMessage(jsonStr), path, json.RawMessage(valStr))
     if err != nil {
         return map[string]interface{}{"error": err.Error()}
     }
@@ -66,7 +66,7 @@ func deleteWrapper(this js.Value, args []js.Value) interface{} {
     }
     jsonStr := args[0].String()
     path := args[1].String()
-    b, err := njson.Delete(json.RawMessage(jsonStr), path)
+    b, err := nqjson.Delete(json.RawMessage(jsonStr), path)
     if err != nil {
         return map[string]interface{}{"error": err.Error()}
     }
@@ -74,9 +74,9 @@ func deleteWrapper(this js.Value, args []js.Value) interface{} {
 }
 
 func main() {
-    js.Global().Set("njsonGet", js.FuncOf(getWrapper))
-    js.Global().Set("njsonSet", js.FuncOf(setWrapper))
-    js.Global().Set("njsonDelete", js.FuncOf(deleteWrapper))
+    js.Global().Set("nqjsonGet", js.FuncOf(getWrapper))
+    js.Global().Set("nqjsonSet", js.FuncOf(setWrapper))
+    js.Global().Set("nqjsonDelete", js.FuncOf(deleteWrapper))
 
     // Keep running
     select {}

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/dhawalhost/njson"
+	"github.com/dhawalhost/nqjson"
 )
 
 type getReq struct {
@@ -47,30 +47,30 @@ func handleGet(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusBadRequest, getResp{Error: "invalid request"})
 		return
 	}
-	res := njson.Get(req.JSON, req.Path)
+	res := nqjson.Get(req.JSON, req.Path)
 	if !res.Exists() {
 		writeJSON(w, http.StatusOK, getResp{Exists: false, Type: "null"})
 		return
 	}
 	out := getResp{Exists: true}
 	switch res.Type {
-	case njson.TypeString:
+	case nqjson.TypeString:
 		out.Type = "string"
 		out.String = res.String()
-	case njson.TypeNumber:
+	case nqjson.TypeNumber:
 		out.Type = "number"
 		f := res.Float()
 		out.Number = &f
-	case njson.TypeBoolean:
+	case nqjson.TypeBoolean:
 		out.Type = "boolean"
 		b := res.Bool()
 		out.Bool = &b
-	case njson.TypeArray:
+	case nqjson.TypeArray:
 		out.Type = "array"
 		var v any
 		_ = json.Unmarshal(res.Raw, &v)
 		out.Value = v
-	case njson.TypeObject:
+	case nqjson.TypeObject:
 		out.Type = "object"
 		var v any
 		_ = json.Unmarshal(res.Raw, &v)
@@ -94,13 +94,13 @@ func handleSetLike(op string) http.HandlerFunc {
 		)
 		switch op {
 		case "set":
-			result, err = njson.Set(req.JSON, req.Path, json.RawMessage(req.Value))
+			result, err = nqjson.Set(req.JSON, req.Path, json.RawMessage(req.Value))
 			if err != nil {
 				writeJSON(w, http.StatusBadRequest, setResp{Error: err.Error()})
 				return
 			}
 		case "delete":
-			result, err = njson.Delete(req.JSON, req.Path)
+			result, err = nqjson.Delete(req.JSON, req.Path)
 			if err != nil {
 				writeJSON(w, http.StatusBadRequest, setResp{Error: err.Error()})
 				return
@@ -123,6 +123,6 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	log.Printf("njson playground listening on :%s", port)
+	log.Printf("nqjson playground listening on :%s", port)
 	log.Fatal(http.ListenAndServe(":"+port, mux))
 }
