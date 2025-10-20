@@ -236,11 +236,22 @@ body {
   align-items: center;
   justify-content: center;
   animation: logoGlow 3s ease-in-out infinite alternate;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.logo img {
+  display: block;
+  width: 48px;
+  height: 48px;
 }
 
 @keyframes logoGlow {
-  0% { filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.5)); }
-  100% { filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.8)); }
+  0% { filter: drop-shadow(0 0 5px rgba(0, 180, 216, 0.4)); }
+  100% { filter: drop-shadow(0 0 15px rgba(0, 180, 216, 0.7)); }
 }
 
 .brand-text {
